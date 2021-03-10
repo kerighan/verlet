@@ -1,0 +1,41 @@
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include "vec.hpp"
+#include "node.hpp"
+#include "force.hpp"
+#include "universe.hpp"
+
+
+namespace py = pybind11;
+
+
+PYBIND11_MODULE(verlet, m)  {
+    py::class_<Node>(m, "Node")
+        .def(py::init<float, float, float, float>(),
+             py::arg("x") = 0,
+             py::arg("y") = 0,
+             py::arg("r") = 1,
+             py::arg("m") = 1)
+        .def("get_position", &Node::get_position)
+        .def("get_before_position", &Node::get_before_position)
+        .def("get_acceleration", &Node::get_acceleration);
+
+    py::class_<Force>(m, "Force")
+        .def(py::init<>());
+
+    py::class_<Charge, Force>(m, "Charge")
+        .def(py::init<float, float, float>(),
+             py::arg("x") = 0,
+             py::arg("y") = 0,
+             py::arg("q") = 1)
+        .def("add", &Charge::add)
+        .def("interact", &Charge::interact);
+
+    py::class_<Universe>(m, "Universe")
+        .def(py::init<float>(),
+             py::arg("delta") = 0.1)
+        .def("add_nodes", &Universe::add_nodes)
+        .def("add_forces", &Universe::add_forces)
+        .def("add_force", &Universe::add_force)
+        .def("run", &Universe::run);
+}
