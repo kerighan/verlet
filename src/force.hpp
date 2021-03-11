@@ -11,6 +11,8 @@ public:
     Force(){};
     virtual Force* clone(){ return new Force(); }
     virtual void interact(){}
+
+    void add(Node* node);
     std::vector<Node*> nodes;
 };
 
@@ -21,12 +23,21 @@ public:
     Charge(const Charge& charge);
     Charge* clone() override{ return new Charge(*this); }
 
-    void add(Node* node);
     void interact() override;
 
 private:
     float q;
     vec2 pos;
+};
+
+
+class Friction : public Force {
+public:
+    Friction(float mu) : mu(mu){};
+    void interact() override;
+
+private:
+    float mu;
 };
 
 #endif

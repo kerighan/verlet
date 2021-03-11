@@ -3,19 +3,24 @@
 #include <iostream>
 
 
-Node::Node(float x, float y, float r, float m){
+Node::Node(float x, float y, float r, float m, float friction){
     this->pos = vec2(x, y);
     this->pos_before = vec2(x, y);
+
+    this->v = vec2(0, 0);
+    this->v_before = vec2(0, 0);
+
     this->a = vec2(0, 0);
     this->r = r;
     this->m = m;
+    this->friction = friction;
 }
 
-void Node::add_force(vec2& force){
+void Node::add_force(const vec2& force){
     this->a += force * (1/this->m);
 }
 
-void Node::add_acc(vec2& acc){
+void Node::add_acc(const vec2& acc){
     this->a += acc;
 }
 
@@ -33,6 +38,17 @@ std::vector<float> Node::get_position(){
     return p;
 }
 
+std::vector<float> Node::get_velocity(){
+    std::vector<float> p(2);
+    p[0] = this->v.x;
+    p[1] = this->v.y;
+    return p;
+}
+
+float Node::get_radius(){
+    return this->r;
+}
+
 std::vector<float> Node::get_before_position(){
     std::vector<float> p(2);
     p[0] = this->pos_before.x;
@@ -42,9 +58,17 @@ std::vector<float> Node::get_before_position(){
 
 void Node::move(float delta){
     vec2 new_pos(0, 0);
-    new_pos = (2. * this->pos) - this->pos_before + delta * delta * this->a;
+    new_pos = ((2. - this->friction) * this->pos) - (1 - this->friction) * this->pos_before + delta * delta * this->a;
+
+    vec2 new_v(0, 0);
+    new_v = v_before + (2 * delta) * this->a;
+    // new_v = this->v + delta * this->a;
+
     this->pos_before = this->pos;
     this->pos = new_pos;
+
+    this->v_before = this->v;
+    this->v = new_v;
 
     // clear forces
     this->a.x = 0;
