@@ -40,4 +40,20 @@ private:
     float mu;
 };
 
+
+class Link : public Force {
+public:
+    Link(Node* node_a, Node* node_b, float q);
+    Link(const Link& force);
+    Link* clone() override{ return new Link(*this); }
+
+    void interact() override;
+
+private:
+    float q;
+    Node* node_a;
+    Node* node_b;
+};
+
+
 #endif

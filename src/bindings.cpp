@@ -38,6 +38,10 @@ PYBIND11_MODULE(verlet, m)  {
              py::arg("mu") = 1)
         .def("interact", &Friction::interact);
 
+    py::class_<Link, Force>(m, "Link")
+        .def(py::init<Node*, Node*, float>())
+        .def("interact", &Link::interact);
+
     py::class_<Universe>(m, "Universe")
         .def(py::init<float, size_t, size_t>(),
              py::arg("delta") = 0.1,

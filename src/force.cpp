@@ -38,3 +38,27 @@ void Friction::interact(){
         node->add_acc(acc);
     }
 }
+
+
+Link::Link(Node* node_a, Node* node_b, float q){
+    this->node_a = node_a;
+    this->node_b = node_b;
+    this->q = q;
+}
+
+
+Link::Link(const Link& force){
+    this->q = force.q;
+    this->node_a = force.node_a;
+    this->node_b = force.node_b;
+}
+
+
+void Link::interact(){
+    Node* node_a = this->node_a;
+    Node* node_b = this->node_b;
+
+    vec2 acc = this->q * (node_b->pos - node_a->pos);
+    node_a->add_acc(acc);
+    node_b->add_acc(-acc);
+}

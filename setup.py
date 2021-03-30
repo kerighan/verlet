@@ -19,7 +19,8 @@ ext_modules = [
 setup(
     name="verlet",
     version="0.0.0",
-    packages=find_packages(),
+    packages=find_packages("src"),
+    package_dir={"": "src"},
     install_requires=["pybind11"],
     ext_modules=ext_modules
 )

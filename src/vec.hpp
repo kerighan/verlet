@@ -23,6 +23,10 @@ struct vec2 {
     vec2 operator-(const vec2& vec){
         return vec2(this->x - vec.x, this->y - vec.y);
     }
+    
+    vec2 operator-(){
+        return vec2(-this->x, -this->y);
+    }
 
     vec2 operator+(const vec2& vec){
         return vec2(this->x + vec.x, this->y + vec.y);
